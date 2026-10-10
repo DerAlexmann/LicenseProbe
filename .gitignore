@@ -1,0 +1,19 @@
+# Bauen
+build/
+dist/
+*.spec
+
+# Python
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+.venv/
+venv/
+
+# Laufzeit: die Einstellungen entstehen neben dem Programm
+licenseprobe.json
+
+# Windows
+Thumbs.db
+desktop.ini

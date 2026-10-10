@@ -1,0 +1,7 @@
+# Zum Entwickeln und Prüfen. Das Programm selbst braucht nichts davon.
+pytest>=8.0
+ruff>=0.6
+
+# Nur fürs Bauen der EXE und des Programmsymbols:
+# pyinstaller
+# Pillow
