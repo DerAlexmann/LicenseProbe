@@ -676,7 +676,7 @@ def px(wert: float) -> int:
 SKALIERUNG = 1.0
 
 # Umbruchbreiten bei 96 dpi: Fliesstext in Karten und Hinweiszeilen
-TEXT_BREITE = 470
+TEXT_BREITE = 560
 HINWEIS_BREITE = 380
 
 
