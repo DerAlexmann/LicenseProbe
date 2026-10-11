@@ -32,7 +32,7 @@ import sys
 import threading
 
 PROGRAMM = "LicenseProbe"
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 # Von gui_starten() belegt, sobald Tkinter geladen ist.
 _tk = None
@@ -456,6 +456,26 @@ def aktivierung_auswerten(ausgabe) -> dict | None:
     }
 
 
+def powershell_pfad() -> str:
+    """Vollstaendiger Pfad der PowerShell im Systemordner.
+
+    Nur der Name "powershell.exe" genuegt nicht: Windows saehe dann zuerst
+    im Programmordner und im aktuellen Ordner nach - eine dort abgelegte
+    fremde Datei gleichen Namens liefe sonst an Stelle der echten PowerShell.
+    """
+    ordner = ""
+    try:
+        import ctypes
+        puffer = ctypes.create_unicode_buffer(260)
+        if ctypes.windll.kernel32.GetSystemDirectoryW(puffer, len(puffer)):
+            ordner = puffer.value
+    except (AttributeError, OSError, ImportError):
+        pass
+    if not ordner:
+        ordner = os.path.join(os.environ.get("SystemRoot", r"C:\Windows"), "System32")
+    return os.path.join(ordner, "WindowsPowerShell", "v1.0", "powershell.exe")
+
+
 def aktivierung_abfragen() -> dict | None:
     """Aktivierungsstand und Teilschlüssel über WMI (dauert ein paar Sekunden).
 
@@ -470,7 +490,7 @@ def aktivierung_abfragen() -> dict | None:
     )
     try:
         ergebnis = subprocess.run(
-            ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", befehl],
+            [powershell_pfad(), "-NoProfile", "-NonInteractive", "-Command", befehl],
             capture_output=True, text=True, timeout=60,
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     except (OSError, subprocess.SubprocessError):

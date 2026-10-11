@@ -168,3 +168,26 @@ def test_lesefunktionen_scheitern_leise(lp):
     for _quelle, _titel, lesefunktion, _herkunft in lp.QUELLEN:
         wert = lp.quelle_lesen(lesefunktion)
         assert wert is None or lp.schluessel_pruefen(wert) == wert
+
+
+def test_powershell_mit_vollem_pfad(lp):
+    """Nie nur der Name: sonst liefe eine fremde powershell.exe im aktuellen Ordner."""
+    pfad = lp.powershell_pfad()
+    assert lp.os.path.isabs(pfad) or not lp.sys.platform.startswith("win")
+    assert pfad.lower().endswith(lp.os.path.join("windowspowershell", "v1.0", "powershell.exe"))
+
+
+def test_abfrage_startet_powershell_aus_dem_systemordner(lp, monkeypatch):
+    aufrufe = []
+
+    class Ergebnis:
+        stdout = json.dumps({"LicenseStatus": 1, "PartialProductKey": "ABCDE"})
+
+    def ausfuehren(befehl, **_):
+        aufrufe.append(befehl)
+        return Ergebnis()
+
+    monkeypatch.setattr(lp.subprocess, "run", ausfuehren)
+    assert lp.aktivierung_abfragen()["teil"] == "ABCDE"
+    assert aufrufe[0][0] == lp.powershell_pfad()
+    assert aufrufe[0][0] != "powershell.exe"

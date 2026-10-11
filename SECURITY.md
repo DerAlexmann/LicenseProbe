@@ -30,7 +30,8 @@ Gepflegt wird jeweils die neueste veröffentlichte Version.
 
 - **Gelesen** wird ausschließlich: aus der Registry (`HKLM`, nur lesend), aus
   der Firmware über `GetSystemFirmwareTable` und über eine
-  WMI-Abfrage (`SoftwareLicensingProduct`) mit der PowerShell. Das Programm
+  WMI-Abfrage (`SoftwareLicensingProduct`) mit der PowerShell, die immer
+  mit vollständigem Pfad aus dem Systemordner gestartet wird. Das Programm
   ändert nichts am System und braucht keine Administratorrechte.
 - **Gespeichert** wird kein Schlüssel – weder in der Einstellungsdatei noch
   sonst auf der Festplatte. In `licenseprobe.json` stehen nur Sprache,
