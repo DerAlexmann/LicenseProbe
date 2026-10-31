@@ -1,4 +1,4 @@
 # Die feste ruff-Fassung der CI. So kippt eine neue Regel keinen fremden Pull
 # Request; Dependabot schlägt die Anhebung als eigene Änderung vor.
 
-ruff==0.16.5
+ruff==0.17.3
