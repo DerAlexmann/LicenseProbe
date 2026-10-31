@@ -23,7 +23,7 @@ Die Liste entstand aus den Dateien, die tatsächlich in der EXE liegen.
 | Bestandteil | Datei in der EXE | Lizenz | Quelle |
 |---|---|---|---|
 | Python | `python314.dll`, Erweiterungsmodule | PSF-2.0 | <https://github.com/python/cpython> |
-| PyInstaller-Bootloader | Startprogramm der EXE | GPL-2.0-or-later mit Bootloader-Ausnahme | <https://github.com/pyinstaller/pyinstaller/tree/v6.22.2/bootloader> |
+| PyInstaller-Bootloader | Startprogramm der EXE | GPL-2.0-or-later mit Bootloader-Ausnahme | <https://github.com/pyinstaller/pyinstaller/tree/v6.22.3/bootloader> |
 | OpenSSL | `libcrypto-3.dll`, `libssl-3.dll` | Apache-2.0 | <https://github.com/openssl/openssl> |
 | libffi | `libffi-8.dll` | MIT | <https://github.com/libffi/libffi> |
 | Tcl/Tk | `tcl90.dll`, `tcl9tk90.dll` | TCL-Lizenz (BSD-artig) | <https://www.tcl-lang.org/software/tcltk/license.html> |
@@ -82,7 +82,7 @@ This list was made from the files actually inside the executable.
 | Component | File in the executable | License | Source |
 |---|---|---|---|
 | Python | `python314.dll`, extension modules | PSF-2.0 | <https://github.com/python/cpython> |
-| PyInstaller bootloader | startup code of the executable | GPL-2.0-or-later with bootloader exception | <https://github.com/pyinstaller/pyinstaller/tree/v6.22.2/bootloader> |
+| PyInstaller bootloader | startup code of the executable | GPL-2.0-or-later with bootloader exception | <https://github.com/pyinstaller/pyinstaller/tree/v6.22.3/bootloader> |
 | OpenSSL | `libcrypto-3.dll`, `libssl-3.dll` | Apache-2.0 | <https://github.com/openssl/openssl> |
 | libffi | `libffi-8.dll` | MIT | <https://github.com/libffi/libffi> |
 | Tcl/Tk | `tcl90.dll`, `tcl9tk90.dll` | TCL license (BSD-style) | <https://www.tcl-lang.org/software/tcltk/license.html> |
