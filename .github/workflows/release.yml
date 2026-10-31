@@ -1,0 +1,137 @@
+name: Release
+
+# Baut die EXE und ein Quellpaket. Ein Versions-Tag legt daraus einen Entwurf an;
+# ein Pull Request oder ein Start von Hand probt den Bau, ohne etwas anzulegen.
+
+on:
+  push:
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quellpaket:
+    name: Quellpaket (ZIP)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: ZIP packen
+        run: |
+          mkdir -p out/LicenseProbe
+          cp -r LicenseProbe.pyw licenseprobe.ico LICENSE NOTICE DRITTANBIETER-LIZENZEN.md \
+             lizenzen README.md README.en.md CHANGELOG.md build.cmd \
+             versionsinfo_erzeugen.py requirements-build.txt out/LicenseProbe/
+          # Schrägstriche im Ref-Namen ersetzen: Bei einem Probelauf von einem
+          # Zweig wie dependabot/pip/... zeigte der Pfad sonst ins Leere.
+          cd out && zip -r "LicenseProbe-${GITHUB_REF_NAME//\//-}-quellen.zip" LicenseProbe
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: quellpaket
+          if-no-files-found: error
+          path: out/*.zip
+
+  windows-exe:
+    name: Windows-EXE
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14.10"
+
+      - name: PyInstaller installieren
+        run: python -m pip install -r requirements-build.txt
+
+      - name: Versionsangaben erzeugen
+        run: python versionsinfo_erzeugen.py
+
+      - name: EXE bauen
+        run: >
+          pyinstaller --noconfirm --onefile --windowed --clean
+          --name "LicenseProbe"
+          --icon licenseprobe.ico
+          --version-file versionsinfo.txt
+          LicenseProbe.pyw
+
+      - name: Versionsangaben der EXE prüfen
+        # Sieht die fertige Datei an. Bei einem Tag muss die Version außerdem dazu
+        # passen, sonst wurde VERSION in LicenseProbe.pyw vergessen.
+        run: |
+          $info = (Get-Item "dist\LicenseProbe.exe").VersionInfo
+          if (-not $info.ProductName -or -not $info.ProductVersion) {
+            throw "Die EXE trägt keine Versionsangaben."
+          }
+          Write-Output "$($info.ProductName) $($info.ProductVersion)"
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and "v$($info.ProductVersion)" -ne $env:GITHUB_REF_NAME) {
+            throw "Tag $($env:GITHUB_REF_NAME) passt nicht zu Version $($info.ProductVersion)."
+          }
+
+      - name: Öffnet die EXE ihr Fenster?
+        # Der Start allein beweist nichts, denn auch eine Fehlermeldung hält das
+        # Programm offen. Erst die Klasse TkTopLevel zeigt das echte Tk-Fenster.
+        run: |
+          Add-Type -Namespace Probe -Name Fenster -MemberDefinition @'
+          [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+          public static extern int GetClassName(IntPtr hWnd, System.Text.StringBuilder name, int laenge);
+          '@
+          $start = Start-Process -FilePath "dist\LicenseProbe.exe" -PassThru
+          $gefunden = $false
+          foreach ($versuch in 1..30) {
+            Start-Sleep -Seconds 1
+            foreach ($prozess in Get-Process LicenseProbe -ErrorAction SilentlyContinue) {
+              if ($prozess.MainWindowHandle -eq 0) { continue }
+              $klasse = New-Object System.Text.StringBuilder 64
+              [void][Probe.Fenster]::GetClassName($prozess.MainWindowHandle, $klasse, 64)
+              if ($klasse.ToString() -eq 'TkTopLevel') { $gefunden = $true }
+            }
+            if ($gefunden) { break }
+          }
+          Get-Process LicenseProbe -ErrorAction SilentlyContinue | Stop-Process -Force
+          if (-not $gefunden) { throw "Die EXE hat ihr Hauptfenster nicht geöffnet." }
+          exit 0
+
+      - name: Prüfsumme und Lizenzhinweise neben die EXE legen
+        run: |
+          $h = (Get-FileHash "dist\LicenseProbe.exe" -Algorithm SHA256).Hash
+          Write-Output "SHA-256: $h"
+          "$h  LicenseProbe.exe" | Out-File -Encoding ascii "dist\SHA256SUMS.txt"
+          Copy-Item DRITTANBIETER-LIZENZEN.md dist/
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-exe
+          if-no-files-found: error
+          path: |
+            dist/LicenseProbe.exe
+            dist/SHA256SUMS.txt
+            dist/DRITTANBIETER-LIZENZEN.md
+
+  release:
+    name: Release-Entwurf anlegen
+    needs: [quellpaket, windows-exe]
+    runs-on: ubuntu-latest
+    # Ohne Tag kennt die Action keinen Namen für den Release und bricht ab.
+    if: github.ref_type == 'tag'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: artefakte
+
+      - name: Release anlegen
+        uses: softprops/action-gh-release@v3
+        with:
+          draft: true          # erst prüfen, dann von Hand veröffentlichen
+          fail_on_unmatched_files: true
+          files: |
+            artefakte/quellpaket/*.zip
+            artefakte/windows-exe/LicenseProbe.exe
+            artefakte/windows-exe/SHA256SUMS.txt
+            artefakte/windows-exe/DRITTANBIETER-LIZENZEN.md

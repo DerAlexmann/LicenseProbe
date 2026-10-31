@@ -1,0 +1,8 @@
+# Für den Bau der Windows-EXE / for building the Windows executable
+#
+# Genaue Versionen statt Untergrenzen: Derselbe Tag soll zweimal dieselbe
+# Anwendung ergeben, und eine fehlerhafte neue Fassung von PyInstaller soll kein
+# Release kippen. Dependabot hebt diese Zeile an, dann wird die neue Fassung
+# einmal bewusst geprüft. Die Untergrenzen in requirements-dev.txt bleiben.
+
+pyinstaller==6.22.2

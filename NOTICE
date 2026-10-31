@@ -1,0 +1,17 @@
+LicenseProbe
+Copyright (c) 2026 Alexander Unverhau
+Created with assistance of Claude AI
+
+Licensed under the MIT License. The full license text is in the file LICENSE
+next to this one; this file adds no conditions of its own.
+
+Die mitgelieferte Windows-EXE enthält zusätzlich Bestandteile anderer Projekte.
+Sie stehen mit Lizenz und Quelle in der Datei DRITTANBIETER-LIZENZEN.md, die
+Lizenztexte im Ordner lizenzen/. Die EXE bleibt als Gesamtwerk unter der
+MIT-Lizenz; die Fremdbestandteile behalten ihre eigenen Lizenzen.
+
+The bundled Windows executable additionally contains components from other
+projects. They are listed with their licenses and sources in the file
+DRITTANBIETER-LIZENZEN.md, the license texts are in the folder lizenzen/. The
+executable as a whole stays under the MIT License; the third-party components
+keep their own licenses.

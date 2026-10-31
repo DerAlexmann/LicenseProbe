@@ -1,6 +1,6 @@
 [project]
 name = "licenseprobe"
-version = "1.0.0"
+version = "1.0.1"
 description = "Zeigt die Windows-Produktschlüssel im Klartext: Firmware, Registry, Sicherung und Aktivierungsstand"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -20,7 +20,8 @@ siehe [SECURITY.md](SECURITY.md).
 |---|---|
 | `LicenseProbe.pyw` | das ganze Programm, eine Datei |
 | `tests/` | Tests für die Auswertung der Schlüssel, die Sprachtabelle und die Oberfläche |
-| `build.cmd`, `icon_erzeugen.py` | EXE und Programmsymbol erzeugen |
+| `build.cmd`, `versionsinfo_erzeugen.py`, `icon_erzeugen.py` | EXE, Versionsangaben und Programmsymbol erzeugen |
+| `DRITTANBIETER-LIZENZEN.md`, `lizenzen/` | Fremdbestandteile der EXE und ihre Lizenztexte |
 
 Die Programmdatei ist von oben nach unten gegliedert: Farbschemata,
 Sprachumschaltung, Einstellungen, Schlüssel lesen, Bausteine der Oberfläche,
@@ -86,6 +87,8 @@ alle. Der Test `test_fenster_passt_in_jede_sprache` prüft das.
 - Tests und `ruff` müssen durchlaufen; die CI prüft beides.
 - Für sichtbare Änderungen einen Eintrag in `CHANGELOG.md` unter
   „Unveröffentlicht" ergänzen.
+- Ändert sich die Python- oder PyInstaller-Fassung des Baus, nachsehen, was in
+  der EXE liegt, und `DRITTANBIETER-LIZENZEN.md` sowie `lizenzen/` nachziehen.
 - Bildschirmfotos zeigen ausschließlich das Programmfenster – kein Desktop,
   keine anderen Fenster, keine persönlichen Pfade und **keine echten
   Produktschlüssel**. Für Bilder die Lesefunktionen durch erfundene Werte
