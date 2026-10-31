@@ -1,0 +1,22 @@
+version: 2
+updates:
+  # Python-Pakete in den requirements-Dateien
+  - package-ecosystem: "pip"
+    directory: "/"
+    # Untergrenzen bleiben in Ruhe, sie nennen die älteste laufende Fassung.
+    # Angehoben werden nur die festen Versionen, denn die lassen nichts Neues zu.
+    versioning-strategy: "increase-if-necessary"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+
+  # Versionen der GitHub-Actions in den Workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"

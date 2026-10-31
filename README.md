@@ -95,7 +95,7 @@ Nicht übersetzte Zeilen erscheinen automatisch auf Deutsch.
 ## Selbst bauen
 
 ```bash
-pip install pyinstaller
+pip install -r requirements-build.txt
 build.cmd
 ```
 
@@ -115,3 +115,8 @@ Weg in [SECURITY.md](SECURITY.md).
 
 [MIT](LICENSE) – Copyright 2026 Alexander Unverhau.
 Erstellt mit Unterstützung von Claude AI.
+
+Die EXE enthält Bestandteile anderer Projekte, etwa Python, Tcl/Tk und OpenSSL.
+Sie stehen mit Lizenz und Quelle in
+[DRITTANBIETER-LIZENZEN.md](DRITTANBIETER-LIZENZEN.md); siehe auch
+[NOTICE](NOTICE).

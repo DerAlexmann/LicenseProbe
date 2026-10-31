@@ -94,7 +94,7 @@ to German automatically.
 ## Building it yourself
 
 ```bash
-pip install pyinstaller
+pip install -r requirements-build.txt
 build.cmd
 ```
 
@@ -114,3 +114,8 @@ route described in [SECURITY.md](SECURITY.md) rather than as an issue.
 
 [MIT](LICENSE) – Copyright 2026 Alexander Unverhau.
 Created with assistance of Claude AI.
+
+The executable contains components from other projects, such as Python, Tcl/Tk
+and OpenSSL. They are listed with their licenses and sources in
+[DRITTANBIETER-LIZENZEN.md](DRITTANBIETER-LIZENZEN.md); see also
+[NOTICE](NOTICE).

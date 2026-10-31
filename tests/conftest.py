@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import importlib.machinery
 import importlib.util
+import os
 import sys
 import time
 from pathlib import Path
@@ -72,7 +73,12 @@ def system(lp, monkeypatch):
     return lage
 
 
-def tk_wurzel_anlegen(tk, versuche=4):
+def oberflaeche_ist_pflicht():
+    """In der Windows-CI darf die Oberfläche nicht ausfallen, siehe ci.yml."""
+    return os.environ.get("OBERFLAECHE_PFLICHT") == "1"
+
+
+def tk_wurzel_anlegen(tk, versuche=4, pflicht=False):
     """Eine Tk-Wurzel anlegen, notfalls in mehreren Anläufen.
 
     Auf den Windows-Läufern der CI schlägt das Anlegen gelegentlich mit
@@ -80,7 +86,8 @@ def tk_wurzel_anlegen(tk, versuche=4):
     Die Startdateien von Tcl liegen am richtigen Ort, lassen sich in diesem
     Moment aber nicht lesen. Das ist eine Eigenheit der Umgebung und kein
     Befund über das Programm, deshalb ein paar Anläufe - und wenn es dabei
-    bleibt, wird der Test übersprungen statt als Fehler gemeldet.
+    bleibt, wird der Test übersprungen statt als Fehler gemeldet. Nur der Anker
+    darf mit `pflicht` scheitern: Er entscheidet über alle Tests der Oberfläche.
     """
     letzter = None
     for nummer in range(versuche):
@@ -89,6 +96,8 @@ def tk_wurzel_anlegen(tk, versuche=4):
         except tk.TclError as fehler:
             letzter = fehler
             time.sleep(0.5 * (nummer + 1))
+    if pflicht:
+        pytest.fail(f"Tk ließ sich nicht starten: {letzter}")
     pytest.skip(f"Tk ließ sich nicht starten: {letzter}")
     return None                                  # unerreichbar, der Klarheit halber
 
@@ -103,8 +112,12 @@ def tk_anker():
     anlegen, gibt es keine Anzeige, und alle Tests der Oberfläche werden
     übersprungen.
     """
-    tk = pytest.importorskip("tkinter", reason="Tkinter ist nicht verfügbar")
-    anker = tk_wurzel_anlegen(tk)
+    pflicht = oberflaeche_ist_pflicht()
+    if pflicht:
+        import tkinter as tk
+    else:
+        tk = pytest.importorskip("tkinter", reason="Tkinter ist nicht verfügbar")
+    anker = tk_wurzel_anlegen(tk, pflicht=pflicht)
     anker.withdraw()
     yield anker
     anker.destroy()

@@ -3,6 +3,32 @@
 Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 die Versionsnummern der [semantischen Versionierung](https://semver.org/lang/de/).
 
+## Unveröffentlicht
+
+### Hinzugefügt
+
+- Die EXE trägt Versionsangaben: Produktname, Version und Urheber stehen in den
+  Dateieigenschaften von Windows.
+- `DRITTANBIETER-LIZENZEN.md`, `NOTICE` und der Ordner `lizenzen/` nennen die
+  Fremdbestandteile der EXE samt Lizenz, Quelle und Lizenztext.
+- Ein Release-Workflow baut EXE und Quellpaket auf GitHub, prüft die fertige EXE
+  und legt bei einem Tag einen Entwurf an. Am Release hängen künftig auch
+  Prüfsumme, Quellpaket und Lizenzdatei.
+- Dependabot schlägt monatlich neue Fassungen vor; die Untergrenzen bleiben.
+
+### Geändert
+
+- Der Bau legt PyInstaller und Python auf genaue Versionen fest. Mitgezogene
+  Abhängigkeiten sind nicht festgelegt, Hash-Pins gibt es nicht, und der Bau ist
+  nicht Bit für Bit reproduzierbar.
+- Die CI testet zusätzlich mit Python 3.14, der Fassung des Baus. Unter Windows
+  darf der Start der Oberflächentests nicht mehr still übersprungen werden.
+
+### Behoben
+
+- `pyproject.toml` nennt die Version wieder passend zum Programm; ein Test hält
+  beide Angaben gleich.
+
 ## [1.0.1] – 2026-10-11
 
 ### Sicherheit

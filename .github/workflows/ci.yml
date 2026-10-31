@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - run: pip install ruff
+      - run: pip install -r requirements-stil.txt
       - run: ruff check .
 
   tests:
@@ -29,7 +29,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        python: ["3.10", "3.12"]
+        python: ["3.10", "3.12", "3.14"]
+    env:
+      # Unter Windows gibt es Tkinter immer: Fehlt es, ist das ein Befund und
+      # kein Grund, alle Tests der Oberfläche still zu überspringen.
+      OBERFLAECHE_PFLICHT: ${{ runner.os == 'Windows' && '1' || '0' }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -37,5 +41,6 @@ jobs:
           python-version: ${{ matrix.python }}
       - run: pip install -r requirements-dev.txt
       # Auf den Linux-Läufern fehlt Tkinter; die Tests der Oberfläche
-      # überspringen sich dort von selbst, die übrigen laufen überall.
-      - run: python -m pytest tests -q
+      # überspringen sich nur dort von selbst, die übrigen laufen überall.
+      # -rs nennt jeden übersprungenen Test samt Grund im Protokoll.
+      - run: python -m pytest tests -q -rs
