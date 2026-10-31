@@ -46,7 +46,8 @@ Release:
 - `Python-LICENSE.txt`: Python, die Bedingungen für den Microsoft-Code, bzip2,
   libffi, Zstandard, der Text der Apache-2.0-Lizenz für OpenSSL, Tcl und Tk.
 - `Python-eingebaute-Bibliotheken.txt`: libmpdec, zlib und mimalloc.
-- `PyInstaller-COPYING.txt`: die Lizenz von PyInstaller samt Bootloader-Ausnahme.
+- `PyInstaller-COPYING.txt`: die Lizenz von PyInstaller samt Bootloader-Ausnahme;
+  seine zusätzlichen Laufzeitmodule stehen unter Apache-2.0.
 
 ### Quellcode der GPL-Bestandteile
 
@@ -105,7 +106,8 @@ of every release:
 - `Python-LICENSE.txt`: Python, the terms for the Microsoft code, bzip2, libffi,
   Zstandard, the Apache-2.0 text for OpenSSL, Tcl and Tk.
 - `Python-eingebaute-Bibliotheken.txt`: libmpdec, zlib and mimalloc.
-- `PyInstaller-COPYING.txt`: the PyInstaller license with its bootloader exception.
+- `PyInstaller-COPYING.txt`: the PyInstaller license with its bootloader exception;
+  its additional run-time modules are under Apache-2.0.
 
 ### Source code of the GPL components
 

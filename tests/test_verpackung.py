@@ -28,7 +28,8 @@ LIZENZTEXTE = {
                            "libbzip2", "libffi", "Zstandard", "Microsoft Distributable Code",
                            "copyrighted by the Regents of the University"),
     "Python-eingebaute-Bibliotheken.txt": ("libmpdec", "zlib", "mimalloc"),
-    "PyInstaller-COPYING.txt": ("Bootloader Exception", "GNU GENERAL PUBLIC LICENSE"),
+    "PyInstaller-COPYING.txt": ("Bootloader Exception", "Additional Run-time Modules",
+                                "GNU GENERAL PUBLIC LICENSE"),
 }
 
 
