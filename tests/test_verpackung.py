@@ -353,7 +353,14 @@ def test_erst_start_hinweis(datei, merkmale):
 
 def test_windows_ci_macht_die_oberflaeche_zur_pflicht():
     tests = jobs(lesen(CI))["tests"]
-    assert "OBERFLAECHE_PFLICHT: ${{ runner.os == 'Windows' && '1' || '0' }}" in tests
+    assert "OBERFLAECHE_PFLICHT: ${{ matrix.os == 'windows-latest' && '1' || '0' }}" in tests
+
+
+def test_job_env_nutzt_keinen_runner_kontext():
+    """Dort gibt es `runner` noch nicht; GitHub verwirft sonst die ganze Datei still."""
+    for job in jobs(lesen(CI)).values():
+        kopf = job.split("    steps:")[0]
+        assert "runner." not in kopf
 
 
 @pytest.mark.parametrize(("wert", "erwartet"), [("1", True), ("0", False), (None, False)])
